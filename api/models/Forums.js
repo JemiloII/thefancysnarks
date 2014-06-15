@@ -8,7 +8,21 @@
 module.exports = {
 
   attributes: {
-
+  	title: {
+  		type: 'string',
+  		unique: true,
+  		required: true
+  	},
+  	parent: {
+  		model: 'forums'
+  	},
+  	createdBy: {
+  		model: 'members'
+  	}, 
+  	order: {
+  		type: 'integer'
+  	}
   }
+  
 };
 
