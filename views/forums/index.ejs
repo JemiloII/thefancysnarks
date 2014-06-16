@@ -1,0 +1,19 @@
+<span class="h1">Forums</span>
+<% var parent = _.last(forums); %>
+<section class="row text-center">
+	<h1><%= parent.title %></h1>
+	<h3><%= parent.description %></h3>
+</section>
+
+<% for(var i = 0; i < forums.length - 1; i++){ %>
+	<section class="row text-center">
+		<header class="title"><span class="h3"><a href="/Forums/<%= forums[i].title %>"><%= forums[i].title %></a></span><%= forums[i].createdAt %></header>
+		<article class="description"><%= forums[i].description %></article>
+		<footer class="info">
+			<div class="createdby">
+				<%= forums[i].createdBy.accountType %> 
+				<%= forums[i].createdBy.username %>
+			</div>
+		</footer>
+	</section>
+<% } %>
