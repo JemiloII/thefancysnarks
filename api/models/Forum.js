@@ -1,11 +1,12 @@
 /**
-* Threads.js
+* Forums.js
 *
 * @description :: TODO: You might write a short summary of how this model works and what it represents here.
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
 module.exports = {
+  
   schema: true,
   attributes: {
   	title: {
@@ -15,13 +16,23 @@ module.exports = {
     description: {
       type: 'text'
     },
-  	forum: {
-  		model: 'forums',
-  		required: true
+  	parent: {
+  		model: 'forum'
   	},
+    forums: {
+      collection: 'forum',
+      via: 'parent'
+    },
+    threads:{
+      collection: 'thread',
+      via: 'forum'
+    },
   	createdBy: {
-  		model: 'members'
+  		model: 'member'
+  	}, 
+  	order: {
+  		type: 'integer'
   	}
   }
-};
 
+};

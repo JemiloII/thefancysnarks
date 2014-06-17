@@ -15,13 +15,13 @@ module.exports = {
   		type: 'text'
   	},
   	thread: {
-  		model: 'threads'
+  		model: 'thread'
   	},
   	blog:{
-  		model: 'blogs'
+  		model: 'blog'
   	},
   	createdBy: {
-  		model: 'members'
+  		model: 'member'
   	}
   }
 };

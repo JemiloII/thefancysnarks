@@ -1,8 +1,8 @@
 <span class="h1">Forums</span>
-<% var parent = _.last(forums); %>
+<% var parentForum = _.last(forums); %>
 <section class="row text-center">
-	<h1><%= parent.title %></h1>
-	<h3><%= parent.description %></h3>
+	<h1><%= parentForum.title %></h1>
+	<h3><%= parentForum.description %></h3>
 </section>
 
 <% for(var i = 0; i < forums.length - 1; i++){ %>
