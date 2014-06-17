@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="/styles/importer.css">
+<ul id='messages'></ul>
+<form id='create-message' action=''>
+    <input type="text" id="body" placeholder="type message here ..."/>
+</form>	
+
+<script id="messageEJS" type="text/ejs">
+	<% this.forEach(function(message){ %>
+	    <li><%= message.body %></li>
+	<% }) %>
+</script>
+<script src='http://agile-everglades-1937.herokuapp.com/socket.io/socket.io.js'></script>
+<script src="/js/chat.js"></script>

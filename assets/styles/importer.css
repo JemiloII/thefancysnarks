@@ -1,0 +1,1 @@
+input{box-sizing:border-box;width:100%}#messages{position:fixed;left:0;right:0;top:0;bottom:24px;overflow:auto}#create-message{position:fixed;left:0;right:0;bottom:0}li{border-top:1px solid #eee;padding:5px}li:last-child{border-bottom:1px solid #eee}li:nth-child(odd){background-color:#fcfcf1}
