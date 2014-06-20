@@ -1,0 +1,18 @@
+<h1>Time to Test My Chat</h1>
+<script>
+	var socket = io.connect();
+
+	socket.on('connect', function() {
+
+	  //get all (and subscribe to) Message model instances
+	  socket.get('/messages', function(data, res) {
+	    console.log(data)
+	  });
+
+	  //listen for Message model events 
+	  socket.on('messages', function(pushData) {
+	    console.log(pushData)
+	  });
+
+	});
+</script>

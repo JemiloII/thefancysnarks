@@ -118,6 +118,9 @@ module.exports.blueprints = {
   // POST   /foos
   // PUT    /foos/:id?
   // DELETE /foos/:id?
-  pluralize: false
+  pluralize: false,
+
+  // Allows find and findOne to be watched with Socket.io
+  autoWatch: true
 
 };

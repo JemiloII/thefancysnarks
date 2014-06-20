@@ -1,17 +1,115 @@
-<link rel="stylesheet" href="/styles/importer.css">
-
-    <script src="/js/dependencies/a.jquery-1.11.1.min.js"></script>
-    <script src="/js/dependencies/can.jquery.js"></script>
-    <script src="/js/can.ejs.js"></script>
+<style>
+input {
+    box-sizing: border-box;
+    width: 100%;
+}
+#messages {
+  position: fixed;
+  left: 0; right: 0;
+  top: 0; bottom: 24px;
+  overflow: auto;
+}
+#create-message {
+  position: fixed;
+  left: 0; right: 0;
+  bottom: 0px;
+}
+li {
+    border-top: 1px solid #eee;
+    padding: 5px;
+}
+li:last-child {
+    border-bottom: 1px solid #eee;
+}
+li:nth-child(odd) {
+    background-color: #fcfcf1;
+}
+</style>
+<script src="http://localhost:1337/js/dependencies/a.jquery-1.11.1.min.js"></script>
+<script src="http://localhost:1337/js/dependencies/can.jquery.js"></script>
+<script src="http://localhost:1337/js/can.ejs.js"></script>
 <ul id='messages'></ul>
 <form id='create-message' action=''>
     <input type="text" id="body" placeholder="type message here ..."/>
 </form>	
 
 <script id="messageEJS" type="text/ejs">
-	<% this.forEach(function(message){ %>
-	    <li><%= message.body %></li>
-	<% }) %>
+<% this.forEach(function(messages){ %>
+    <li><%= messages.body %></li>
+<% }) %>
 </script>
-<script src='http://agile-everglades-1937.herokuapp.com/socket.io/socket.io.js'></script>
-<script src="/js/chat.js"></script>
+            
+<script src='http://localhost:1337/js/dependencies/sails.io.js'></script>
+
+<script>
+/* jshint ignore:start */
+//var myServerUrl = "http://agile-everglades-1937.herokuapp.com";
+var myServerUrl = "http://localhost:1337";
+
+
+// define our message model
+var Message = can.Model({
+    findAll : 'GET ' + myServerUrl + '/messages',
+    // create a message, but prevent the 'created' event from firing
+    // create : 'POST '+ myServerUrl + '/messages'
+    create : function(attrs) {
+        console.log('post message : ' +attrs)
+        socket.post(myServerUrl + '/messages', attrs)
+        return $.Deferred()
+    }
+},{});
+
+// connect using Socket.io
+var socket = io.connect(myServerUrl)
+
+socket.on('connect', function() {
+// listen for 'message-created' event to create a Message instance
+// Note: the 'created' event IS triggered on this model instance. 
+io.socket.on('messages', function(err, messages){
+	console.log('On Message'+ messages)
+	new Message(messages).created()
+})
+
+// initially find all messages from the server and append them to the DOM
+socket.get('/messages', function(messages, res) {
+  console.log('get messages'+messages)
+  $("#messages").html( can.view('messageEJS', messages) )
+  scrollToBottom()
+});
+
+
+// Message.findAll({},function(messages){
+// 	console.log(messages)
+//   $("#messages").html( can.view('messageEJS', messages) )
+//   scrollToBottom()
+  
+// })
+
+// listen for the 'created' event on the Model 
+// append the message to the DOM using a template
+Message.bind("created", function(ev, message){
+	console.log("created", message)
+    var messagesCont = $("#messages"),
+        shouldScroll = ( messagesCont.scrollTop() + messagesCont[0].clientHeight 
+        === messagesCont[0].scrollHeight )
+    
+    messagesCont.append( can.view('messageEJS', [messages]) )
+      
+    if (shouldScroll) {
+        scrollToBottom()
+    }
+})
+
+// listen for the form to submit 
+// create a message and post the results to the server
+$("#create-message").bind("submit",function(ev){
+	ev.preventDefault()
+	new Message({body: $("#body").val()}).save()
+    $("#body").val('');
+})
+
+var scrollToBottom = function() {
+     $("#messages").scrollTop($("#messages")[0].scrollHeight);   
+}
+});
+</script>
